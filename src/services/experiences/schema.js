@@ -2,23 +2,23 @@ const { Schema, model } = require("mongoose");
 
 const ExperienceSchema = new Schema(
   {
-    name: {
+    role: {
       type: String,
       required: true,
     },
-    surname: {
+    company: {
       type: String,
       required: true,
     },
-    email: {
-      type: String,
+    startDate: {
+      type: Date,
       required: true,
     },
-    bio: {
-      type: String,
+    endDate: {
+      type: Date,
       required: true,
     },
-    title: {
+    description: {
       type: String,
       required: true,
     },
@@ -26,12 +26,12 @@ const ExperienceSchema = new Schema(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-    },
     username: {
       type: String,
       required: true,
+    },
+    image: {
+      type: String,
     },
   },
   { timestamps: true }

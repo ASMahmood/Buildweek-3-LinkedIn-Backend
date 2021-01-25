@@ -5,7 +5,40 @@ const profileRouter = express.Router();
 
 profileRouter.post("/", async (req, res, next) => {
   try {
-    const profileWithImage = { ...req.body };
+    const profileWithImage = {
+      ...req.body,
+      image:
+        "https://res.cloudinary.com/dhmw620tl/image/upload/v1611568491/benchmark3/default-profile.png",
+    };
+    const newProfile = new ProfileModel(profileWithImage);
+    const savedProfile = await newProfile.save();
+    res.status(201).send(savedProfile);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+profileRouter.get("/", async (req, res, next) => {
+  try {
+    const allProfiles = await ProfileModel.find();
+    res.send(allProfiles);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+profileRouter.get("/:id", async (req, res, next) => {
+  try {
+    const singleProfile = await ProfileModel.findById(req.params.id);
+    if (singleProfile) {
+      res.send(singleProfile);
+    } else {
+      res
+        .status(404)
+        .send(`We cannot find a user with the id: ${req.params.id}`);
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
