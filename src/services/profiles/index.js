@@ -43,7 +43,9 @@ profileRouter.get("/", async (req, res, next) => {
 
 profileRouter.get("/:id", async (req, res, next) => {
   try {
-    const singleProfile = await ProfileModel.findById(req.params.id);
+    const singleProfile = await ProfileModel.findById(req.params.id).populate(
+      "experiences"
+    );
     if (singleProfile) {
       res.send(singleProfile);
     } else {
