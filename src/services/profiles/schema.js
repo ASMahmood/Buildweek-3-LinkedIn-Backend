@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const profileRouter = require(".");
 
 const ProfileSchema = new Schema(
   {
@@ -33,8 +34,20 @@ const ProfileSchema = new Schema(
       type: String,
       required: true,
     },
+    experiences: [{ type: Schema.Types.ObjectId, ref: "Experiences" }],
   },
   { timestamps: true }
+);
+
+ProfileSchema.static(
+  "addExperienceToProfile",
+  async function (experienceID, profileID) {
+    await ProfileModel.findByIdAndUpdate(
+      experienceID,
+      { $push: { experiences: profileID } },
+      { runValidators: true, new: true }
+    );
+  }
 );
 
 const ProfileModel = model("Profiles", ProfileSchema);
