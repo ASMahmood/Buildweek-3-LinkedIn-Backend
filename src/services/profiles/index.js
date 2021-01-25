@@ -45,4 +45,40 @@ profileRouter.get("/:id", async (req, res, next) => {
   }
 });
 
+profileRouter.put("/:id", async (req, res, next) => {
+  try {
+    const alteredProfile = await ProfileModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { runValidators: true, new: true }
+    );
+    if (alteredProfile) {
+      res.send(alteredProfile);
+    } else {
+      res
+        .status(404)
+        .send(
+          "The profile you would like to edit cannot be found inside our database. Bitch."
+        );
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+profileRouter.delete("/:id", async (req, res, next) => {
+  try {
+    const deletedProfile = await ProfileModel.findByIdAndDelete(req.params.id);
+    if (deletedProfile) {
+      res.send("Profile successfully executed");
+    } else {
+      res.status(404).send("Profile escaped before we could execute it.");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
 module.exports = profileRouter;
