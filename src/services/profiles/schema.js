@@ -29,6 +29,7 @@ const ProfileSchema = new Schema(
     },
     image: {
       type: String,
+      required: true,
     },
     username: {
       type: String,
