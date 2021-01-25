@@ -1,7 +1,19 @@
 const express = require("express");
 const ProfileModel = require("./schema");
+const multer = require("multer");
 
 const profileRouter = express.Router();
+
+const cloudinary = require("../../utilities/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "benchmark3",
+  },
+});
+const cloudinaryMulter = multer({ storage: storage });
 
 profileRouter.post("/", async (req, res, next) => {
   try {
@@ -80,5 +92,23 @@ profileRouter.delete("/:id", async (req, res, next) => {
     res.status(500).send(error);
   }
 });
+
+profileRouter.post(
+  "/:id/picture",
+  cloudinaryMulter.single("profilePic"),
+  async (req, res, next) => {
+    try {
+      const alteredProfile = await ProfileModel.findByIdAndUpdate(
+        req.params.id,
+        { image: req.file.path },
+        { runValidators: true, new: true }
+      );
+      res.send(alteredProfile);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+);
 
 module.exports = profileRouter;
