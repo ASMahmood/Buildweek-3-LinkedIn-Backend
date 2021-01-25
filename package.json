@@ -27,6 +27,9 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.11.13"
+    "fs-extra": "^9.1.0",
+    "mongoose": "^5.11.13",
+    "query-to-mongo": "^0.10.1",
+    "uniqid": "^5.2.0"
   }
 }
