@@ -43,9 +43,10 @@ const ProfileSchema = new Schema(
 ProfileSchema.static(
   "addExperienceToProfile",
   async function (experienceID, profileID) {
+    console.log("hello?");
     await ProfileModel.findByIdAndUpdate(
-      experienceID,
-      { $push: { experiences: profileID } },
+      profileID,
+      { $push: { experiences: experienceID } },
       { runValidators: true, new: true }
     );
   }

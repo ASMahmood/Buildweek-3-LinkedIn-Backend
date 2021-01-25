@@ -1,5 +1,6 @@
 const express = require("express");
 const ExperienceModel = require("./schema");
+const ProfileModel = require("../profiles/schema");
 const multer = require("multer");
 
 const experienceRouter = express.Router();
@@ -24,8 +25,9 @@ experienceRouter.post("/", async (req, res, next) => {
         "https://res.cloudinary.com/dhmw620tl/image/upload/v1611568491/benchmark3/default-profile.png",
     };
     const newExperience = new ExperienceModel(experienceWithImage);
-    const savedExperience = await newExperience.save();
-    res.status(201).send(savedExperience);
+    const { _id } = await newExperience.save();
+    await ProfileModel.addExperienceToProfile(_id, req.body.profileId);
+    res.status(201).send(newExperience);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
