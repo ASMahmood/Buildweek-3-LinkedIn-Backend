@@ -1,5 +1,6 @@
 const express = require("express");
 const ExperienceModel = require("./schema");
+const ProfileModel = require("../profiles/schema");
 const multer = require("multer");
 
 const experienceRouter = express.Router();
@@ -25,6 +26,10 @@ experienceRouter.post("/", async (req, res, next) => {
     };
     const newExperience = new ExperienceModel(experienceWithImage);
     const savedExperience = await newExperience.save();
+    await ProfileModel.addExperienceToProfile(
+      savedExperience._id,
+      req.body.profileID
+    );
     res.status(201).send(savedExperience);
   } catch (error) {
     console.log(error);

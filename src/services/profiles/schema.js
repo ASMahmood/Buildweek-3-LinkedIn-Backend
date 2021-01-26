@@ -44,8 +44,8 @@ ProfileSchema.static(
   "addExperienceToProfile",
   async function (experienceID, profileID) {
     await ProfileModel.findByIdAndUpdate(
-      experienceID,
-      { $push: { experiences: profileID } },
+      profileID,
+      { $push: { experiences: experienceID } },
       { runValidators: true, new: true }
     );
   }
