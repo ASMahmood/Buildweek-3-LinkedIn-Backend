@@ -1,56 +1,93 @@
 const express = require("express");
 const PostModel = require("./schema");
-
+const multer = require("multer");
 const postRouter = express.Router();
+const cloudinary = require("../../utilities/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "benchmark3",
+  },
+});
+const cloudinaryMulter = multer({ storage: storage });
 //working
 postRouter.post("/", async (req, res) => {
-    try {
-      const newPost = new PostModel(req.body);
-      const { _id } = await newPost.save();
-      res.status(201).send(_id);
-    } catch (error) {
-      console.log(error);
-      res.send("Somethings gone wrong");
-    }
-  })
-  //working
-  postRouter.get("/", async (req, res) => {
-    try {
-      const allPosts = await PostModel.find()
-      res.status(201).send(allPosts);
-    } catch (error) {
-      console.log(error);
-      res.send("Somethings gone wrong");
-    }
-  });
+  try {
+    const newPost = new PostModel(req.body);
+    const { _id } = await newPost.save();
+    res.status(201).send(_id);
+  } catch (error) {
+    console.log(error);
+    res.send("Somethings gone wrong");
+  }
+});
 //working
-  postRouter.get("/:id", async (req, res) => {
+postRouter.get("/", async (req, res) => {
+  try {
+    const allPosts = await PostModel.find().populate(
+      "user_id"
+    );
+    res.status(201).send(allPosts);
+  } catch (error) {
+    console.log(error);
+    res.send("Somethings gone wrong");
+  }
+});
+//working
+postRouter.get("/:id", async (req, res) => {
+  try {
+    const allPosts = await PostModel.findById(req.params.id).populate(
+      "user_id"
+    );
+    res.status(201).send(allPosts);
+  } catch (error) {
+    console.log(error);
+    res.send("Somethings gone wrong");
+  }
+});
+//wroking
+postRouter.delete("/:id", async (req, res) => {
+  try {
+    const elementToDelete = await PostModel.findByIdAndDelete(req.params.id);
+    res.status(201).send("This element is deleted ->" + elementToDelete);
+  } catch (error) {
+    console.log(error);
+    res.send("Somethings gone wrong");
+  }
+});
+//wroking
+postRouter.put("/:id", async (req, res) => {
+  try {
+    const elementToUpdate = await PostModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    res.status(201).send("This element was updated ->" + elementToUpdate);
+  } catch (error) {
+    console.log(error);
+    res.send("Somethings gone wrong");
+  }
+});
+
+
+//POST A PICTURE
+postRouter.post(
+  "/:id/picture",
+  cloudinaryMulter.single("postPic"),
+  async (req, res, next) => {
     try {
-      const allPosts = await PostModel.findById(req.params.id)
-      res.status(201).send(allPosts);
+      const updatedPost = await PostModel.findByIdAndUpdate(
+        req.params.id,
+        { image: req.file.path },
+        { runValidators: true, new: true }
+      );
+      res.send(updatedPost);
     } catch (error) {
       console.log(error);
-      res.send("Somethings gone wrong");
+      res.status(500).send(error);
     }
-  });
-  //wroking
-  postRouter.delete("/:id", async (req, res) => {
-    try {
-      const elementToDelete = await PostModel.findByIdAndDelete(req.params.id)
-      res.status(201).send("This element is deleted ->" + elementToDelete);
-    } catch (error) {
-      console.log(error);
-      res.send("Somethings gone wrong");
-    }
-  });
-    //wroking
-  postRouter.put("/:id", async (req, res) => {
-    try {
-      const elementToUpdate = await PostModel.findByIdAndUpdate(req.params.id,req.body)
-      res.status(201).send("This element was updated ->" + elementToUpdate);
-    } catch (error) {
-      console.log(error);
-      res.send("Somethings gone wrong");
-    }
-  });
+  }
+);
 module.exports = postRouter;

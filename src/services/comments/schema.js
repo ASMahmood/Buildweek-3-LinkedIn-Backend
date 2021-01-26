@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const PostsSchema = new Schema(
+const CommentsSchema = new Schema(
   {
     text: {
       type: String,
@@ -13,14 +13,17 @@ const PostsSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Profiles",
     },
-    comments: [{ type: Schema.Types.ObjectId, ref: "Comments" }],
+    post_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Posts",
+    },
     image: {
       type: String,
-      required: true, // set default
+      required: true,
     },
   },
   { timestamps: true }
 );
 
-const PostModel = model("Posts", PostsSchema);
-module.exports = PostModel;
+const CommentModel = model("Comments", CommentsSchema);
+module.exports = CommentModel;

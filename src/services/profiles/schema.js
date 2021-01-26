@@ -29,6 +29,7 @@ const ProfileSchema = new Schema(
     },
     image: {
       type: String,
+      required: true,
     },
     username: {
       type: String,
@@ -43,8 +44,8 @@ ProfileSchema.static(
   "addExperienceToProfile",
   async function (experienceID, profileID) {
     await ProfileModel.findByIdAndUpdate(
-      experienceID,
-      { $push: { experiences: profileID } },
+      profileID,
+      { $push: { experiences: experienceID } },
       { runValidators: true, new: true }
     );
   }
