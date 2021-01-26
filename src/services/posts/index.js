@@ -1,7 +1,17 @@
 const express = require("express");
 const PostModel = require("./schema");
-
+const multer = require("multer");
 const postRouter = express.Router();
+const cloudinary = require("../../utilities/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "benchmark3",
+  },
+});
+const cloudinaryMulter = multer({ storage: storage });
 //working
 postRouter.post("/", async (req, res) => {
   try {
@@ -16,7 +26,9 @@ postRouter.post("/", async (req, res) => {
 //working
 postRouter.get("/", async (req, res) => {
   try {
-    const allPosts = await PostModel.find();
+    const allPosts = await PostModel.find().populate(
+      "user_id"
+    );
     res.status(201).send(allPosts);
   } catch (error) {
     console.log(error);
@@ -58,4 +70,24 @@ postRouter.put("/:id", async (req, res) => {
     res.send("Somethings gone wrong");
   }
 });
+
+
+//POST A PICTURE
+postRouter.post(
+  "/:id/picture",
+  cloudinaryMulter.single("postPic"),
+  async (req, res, next) => {
+    try {
+      const updatedPost = await PostModel.findByIdAndUpdate(
+        req.params.id,
+        { image: req.file.path },
+        { runValidators: true, new: true }
+      );
+      res.send(updatedPost);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+);
 module.exports = postRouter;

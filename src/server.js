@@ -13,7 +13,7 @@ const port = process.env.PORT || 3002;
 server.use(cors());
 server.use(express.json());
 
-server.use("/posts", postsRoutes);
+server.use("/post", postsRoutes);
 server.use("/comment", commentsRouter);
 server.use("/profile", profileRouter);
 server.use("/experience", experienceRouter);
