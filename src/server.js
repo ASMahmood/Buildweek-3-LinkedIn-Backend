@@ -18,8 +18,7 @@ server.use("/comment", commentsRouter);
 server.use("/profile", profileRouter);
 server.use("/experience", experienceRouter);
 
-mongoose
-  .connect(process.env.MONGO_ATLAS, {
+mongoose.connect(process.env.MONGO_ATLAS, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

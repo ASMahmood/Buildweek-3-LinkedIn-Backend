@@ -29,6 +29,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "fs-extra": "^9.1.0",
+    "json2csv": "^5.0.5",
     "mongoose": "^5.11.13",
     "multer": "^1.4.2",
     "multer-storage-cloudinary": "^4.0.0",

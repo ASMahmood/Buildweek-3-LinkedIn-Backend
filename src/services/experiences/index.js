@@ -2,6 +2,7 @@ const express = require("express");
 const ExperienceModel = require("./schema");
 const ProfileModel = require("../profiles/schema");
 const multer = require("multer");
+const json2csv = require("json2csv").parse;
 
 const experienceRouter = express.Router();
 
@@ -122,4 +123,32 @@ experienceRouter.post(
     }
   }
 );
+
+// CSV EXPERIENCE
+experienceRouter.get("/export/csv/:userName", async (req, res, next) => {
+  const experience = await ExperienceModel.find({
+    username: req.params.userName,
+  });
+  const fields = [
+    "_id",
+    "role",
+    "company",
+    "startDate",
+    "endDate",
+    "description",
+    "area",
+    "username",
+    "createdAt",
+    "updatedAt",
+  ];
+  const data = { fields };
+  const csvString = json2csv(experience, data);
+  res.setHeader(
+    "Content-disposition",
+    "attachment; filename=shifts-report.csv"
+  );
+  res.set("Content-Type", "text/csv");
+  res.status(200).send(csvString);
+});
+
 module.exports = experienceRouter;
