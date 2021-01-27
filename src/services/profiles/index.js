@@ -7,7 +7,6 @@ const profileRouter = express.Router();
 const axios = require("axios");
 const cloudinary = require("../../utilities/cloudinary");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const { request } = require("express");
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
@@ -37,6 +36,24 @@ profileRouter.get("/", async (req, res, next) => {
   try {
     const allProfiles = await ProfileModel.find();
     res.send(allProfiles);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+profileRouter.post("/sign/in", async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const selectedProfile = await ProfileModel.find().and([
+      { email: req.body.email },
+      { password: req.body.password },
+    ]);
+    if (selectedProfile) {
+      res.send(selectedProfile);
+    } else {
+      res.status(404).send("why");
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send(error);

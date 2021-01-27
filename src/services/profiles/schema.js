@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const profileRouter = require(".");
 
 const ProfileSchema = new Schema(
   {
@@ -34,6 +33,11 @@ const ProfileSchema = new Schema(
     username: {
       type: String,
       required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      select: false,
     },
     experiences: [{ type: Schema.Types.ObjectId, ref: "Experiences" }],
   },

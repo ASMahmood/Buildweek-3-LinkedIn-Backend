@@ -26,9 +26,7 @@ postRouter.post("/", async (req, res) => {
 //working
 postRouter.get("/", async (req, res) => {
   try {
-    const allPosts = await PostModel.find().populate(
-      "user_id"
-    );
+    const allPosts = await PostModel.find().populate("user_id");
     res.status(201).send(allPosts);
   } catch (error) {
     console.log(error);
@@ -70,7 +68,6 @@ postRouter.put("/:id", async (req, res) => {
     res.send("Somethings gone wrong");
   }
 });
-
 
 //POST A PICTURE
 postRouter.post(
