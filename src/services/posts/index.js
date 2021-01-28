@@ -26,7 +26,7 @@ postRouter.post("/", async (req, res) => {
 //working
 postRouter.get("/", async (req, res) => {
   try {
-    const allPosts = await PostModel.find().populate("user_id");
+    const allPosts = await PostModel.find().populate("comments").populate("user_id");
     res.status(201).send(allPosts);
   } catch (error) {
     console.log(error);
@@ -36,9 +36,7 @@ postRouter.get("/", async (req, res) => {
 //working
 postRouter.get("/:id", async (req, res) => {
   try {
-    const allPosts = await PostModel.findById(req.params.id).populate(
-      "user_id"
-    );
+    const allPosts = await PostModel.findById(req.params.id).populate("comments").populate("user_id")
     res.status(201).send(allPosts);
   } catch (error) {
     console.log(error);
@@ -102,6 +100,7 @@ postRouter.put("/:id/like/:profileID", async (req, res, next) => {
   }
 });
 
+//UNLIKE POST
 postRouter.put("/:id/unlike/:profileID", async (req, res, next) => {
   try {
     await PostModel.findByIdAndUpdate(
@@ -114,5 +113,6 @@ postRouter.put("/:id/unlike/:profileID", async (req, res, next) => {
     next(error);
   }
 });
+
 
 module.exports = postRouter;

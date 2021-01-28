@@ -23,5 +23,17 @@ const PostsSchema = new Schema(
   { timestamps: true }
 );
 
+//Push a comment into a post
+PostsSchema.static(
+  "addCommentToPost",
+  async function (commentId, postId) {
+    await PostModel.findByIdAndUpdate(
+      postId,
+      { $push: { comments: commentId } },
+      { runValidators: true, new: true }
+    );
+  }
+);
+
 const PostModel = model("Posts", PostsSchema);
 module.exports = PostModel;
