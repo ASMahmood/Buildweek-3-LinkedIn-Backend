@@ -13,7 +13,7 @@ const PostsSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Profiles",
     },
-    comments: { type: Schema.Types.ObjectId, ref: "Comments" },
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comments" }],
     image: {
       type: String,
       required: true, // set default
