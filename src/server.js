@@ -5,7 +5,7 @@ const {
   badRequestHandler,
   notFoundHandler,
   genericErrorHandler,
-} = require("./util/errorHandling");
+} = require("./utilities/errorHandling");
 
 const postsRoutes = require("./services/posts");
 const commentsRouter = require("./services/comments");
