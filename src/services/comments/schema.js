@@ -9,10 +9,11 @@ const CommentsSchema = new Schema(
       type: String,
       required: true,
     },
-    user_id: {
+    user_id: [{
       type: Schema.Types.ObjectId,
       ref: "Profiles",
-    },
+    }
+  ],
     post_id: {
       type: Schema.Types.ObjectId,
       ref: "Posts",
