@@ -86,5 +86,33 @@ postRouter.post(
   }
 );
 
+//LIKE POST
+postRouter.put("/:id/like/:profileID", async (req, res, next) => {
+  try {
+    await PostModel.findByIdAndUpdate(
+      req.params.id,
+      { $push: { likes: req.params.profileID } },
+      { runValidators: true, new: true }
+    );
+    res.send("liked");
+  } catch (error) {
+    next(error);
+  }
+});
+
+//UNLIKE POST
+postRouter.put("/:id/unlike/:profileID", async (req, res, next) => {
+  try {
+    await PostModel.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { likes: req.params.profileID } },
+      { runValidators: true, new: true }
+    );
+    res.send("unliked");
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 module.exports = postRouter;
