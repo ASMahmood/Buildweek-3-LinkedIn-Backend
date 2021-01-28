@@ -1,6 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const {
+  badRequestHandler,
+  notFoundHandler,
+  genericErrorHandler,
+} = require("./utilities/errorHandling");
 
 const postsRoutes = require("./services/posts");
 const commentsRouter = require("./services/comments");
@@ -17,6 +22,10 @@ server.use("/post", postsRoutes);
 server.use("/comment", commentsRouter);
 server.use("/profile", profileRouter);
 server.use("/experience", experienceRouter);
+
+server.use(badRequestHandler);
+server.use(notFoundHandler);
+server.use(genericErrorHandler);
 
 mongoose
   .connect(process.env.MONGO_ATLAS, {
