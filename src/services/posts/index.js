@@ -36,20 +36,18 @@ postRouter.get("/", async (req, res) => {
 //working
 postRouter.get("/:id", async (req, res) => {
   try {
-    const allPosts = await PostModel.findById(req.params.id) .populate({ 
+    const allPosts = await PostModel.findById(req.params.id).populate({
       path: 'comments',
-      populate: {
-        path: 'user_id',
-        model: 'Profiles'
-      } 
-   }).populate("user_id")
+      // Get friends of friends - populate the 'friends' array for every friend
+      populate: { path: 'Profiles' }
+    }).populate("user_id")
     res.status(201).send(allPosts);
   } catch (error) {
     console.log(error);
     res.send("Somethings gone wrong");
   }
 });
-//wroking
+//working
 postRouter.delete("/:id", async (req, res) => {
   try {
     const elementToDelete = await PostModel.findByIdAndDelete(req.params.id);
