@@ -1,6 +1,7 @@
 const express = require("express");
 const CommentModel = require("./schema");
 const multer = require("multer");
+const PostModel = require("../posts/schema")
 
 const commentRouter = express.Router();
 
@@ -21,7 +22,7 @@ commentRouter.post("/", async (req, res, next) => {
     const savedcomment = await newcomment.save();
     await PostModel.addCommentToPost(
       savedcomment._id,
-      req.body.postID
+      req.body.post_id
     );
     res.status(201).send(savedcomment);
   } catch (error) {
