@@ -26,7 +26,12 @@ postRouter.post("/", async (req, res) => {
 //working
 postRouter.get("/", async (req, res) => {
   try {
-    const allPosts = await PostModel.find().populate("comments").populate("user_id");
+    const allPosts = await PostModel.find().populate({
+      path: 'comments',
+      populate: { path: 'user_id',
+      model:"Profiles"
+     }
+    }).populate("user_id");
     res.status(201).send(allPosts);
   } catch (error) {
     console.log(error);
