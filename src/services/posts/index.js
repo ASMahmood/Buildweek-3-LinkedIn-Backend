@@ -39,7 +39,7 @@ postRouter.get("/:id", async (req, res) => {
     const allPosts = await PostModel.findById(req.params.id).populate({
       path: 'comments',
       // Get friends of friends - populate the 'friends' array for every friend
-      populate: { path: 'Profiles' }
+      populate: { path: 'user_id' }
     }).populate("user_id")
     res.status(201).send(allPosts);
   } catch (error) {
