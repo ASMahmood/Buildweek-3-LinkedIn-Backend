@@ -14,6 +14,7 @@ const PostsSchema = new Schema(
       ref: "Profiles",
     },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comments" }],
+    likes: [{ type: Schema.Types.ObjectId, ref: "Profiles" }],
     image: {
       type: String,
       required: true, // set default
