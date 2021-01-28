@@ -19,6 +19,10 @@ commentRouter.post("/", async (req, res, next) => {
   try {
     const newcomment = new CommentModel({ ...req.body, image: "default" });
     const savedcomment = await newcomment.save();
+    await PostModel.addCommentToPost(
+      savedcomment._id,
+      req.body.postID
+    );
     res.status(201).send(savedcomment);
   } catch (error) {
     console.log(error);
